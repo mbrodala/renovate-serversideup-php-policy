@@ -5,17 +5,18 @@
   ],
   "packageRules": [
     {
-      "description": "serversideup/php: split tags into PHP major/minor/patch (image version as build); major/minor updates only in the Dependency Dashboard",
+      "description": "serversideup/php: split tags into PHP major/minor/patch, with the image version as build",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["serversideup/php"],
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)(?:\\.(?<patch>\\d+))?-(?<compatibility>[a-z0-9-]+)-v(?<build>\\d+\\.\\d+\\.\\d+)$",
-      "extends": [
-        ":separatePatchReleases",
-        ":approveMajorUpdates"
-      ],
-      "minor": {
-        "dependencyDashboardApproval": true
-      }
+      "extends": [":separatePatchReleases"]
+    },
+    {
+      "description": "serversideup/php: PHP major/minor updates only appear in the Dependency Dashboard, no branch/MR until approved there",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["serversideup/php"],
+      "matchUpdateTypes": ["major", "minor"],
+      "dependencyDashboardApproval": true
     }
   ]
 }
