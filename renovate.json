@@ -2,5 +2,20 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "serversideup/php: split tags into PHP major/minor/patch (image version as build); major/minor updates only in the Dependency Dashboard",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["serversideup/php"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)(?:\\.(?<patch>\\d+))?-(?<compatibility>[a-z0-9-]+)-v(?<build>\\d+\\.\\d+\\.\\d+)$",
+      "extends": [
+        ":separatePatchReleases",
+        ":approveMajorUpdates"
+      ],
+      "minor": {
+        "dependencyDashboardApproval": true
+      }
+    }
   ]
 }
