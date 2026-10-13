@@ -1,0 +1,1 @@
+# renovate-serversideup-php-policy
