@@ -39,9 +39,10 @@
       "enabled": false
     },
     {
-      "description": "PHP: separate patch releases",
+      "description": "PHP: separate patch releases and one update per minor stream",
       "matchDepNames": ["serversideup/php (PHP)"],
-      "extends": [":separatePatchReleases"]
+      "extends": [":separatePatchReleases"],
+      "separateMultipleMinor": true
     },
     {
       "description": "PHP: major/minor updates only appear in the Dependency Dashboard, no branch/MR until approved there",
