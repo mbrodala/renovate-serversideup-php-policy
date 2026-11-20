@@ -3,50 +3,20 @@
   "extends": [
     "config:recommended"
   ],
-  "customManagers": [
-    {
-      "description": "serversideup/php: PHP version part of the tag",
-      "customType": "regex",
-      "managerFilePatterns": ["/(^|/)Dockerfile[^/]*$/"],
-      "matchStrings": [
-        "serversideup/php:(?<currentValue>\\d+\\.\\d+\\.\\d+)-(?<variant>[a-z0-9-]+)-v(?<image>\\d+\\.\\d+\\.\\d+)"
-      ],
-      "datasourceTemplate": "docker",
-      "packageNameTemplate": "serversideup/php",
-      "depNameTemplate": "serversideup/php (PHP)",
-      "versioningTemplate": "semver",
-      "extractVersionTemplate": "^(?<version>\\d+\\.\\d+\\.\\d+)-{{{variant}}}-v{{{image}}}$"
-    },
-    {
-      "description": "serversideup/php: image version part of the tag",
-      "customType": "regex",
-      "managerFilePatterns": ["/(^|/)Dockerfile[^/]*$/"],
-      "matchStrings": [
-        "serversideup/php:(?<php>\\d+\\.\\d+\\.\\d+)-(?<variant>[a-z0-9-]+)-v(?<currentValue>\\d+\\.\\d+\\.\\d+)"
-      ],
-      "datasourceTemplate": "docker",
-      "packageNameTemplate": "serversideup/php",
-      "depNameTemplate": "serversideup/php (image)",
-      "versioningTemplate": "semver",
-      "extractVersionTemplate": "^{{{php}}}-{{{variant}}}-v(?<version>\\d+\\.\\d+\\.\\d+)$"
-    }
-  ],
   "packageRules": [
     {
-      "description": "Disable the built-in Docker manager for this image, the custom managers replace it",
-      "matchManagers": ["dockerfile", "docker-compose"],
-      "matchPackageNames": ["serversideup/php"],
-      "enabled": false
-    },
-    {
-      "description": "PHP: separate patch releases and one update per minor stream",
-      "matchDepNames": ["serversideup/php (PHP)"],
+      "description": "serversideup/php: PHP major/minor/patch, image minor/patch as build/revision, variant + OS + image major as compatibility",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["serversideup/php", "**/serversideup/php"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.+-v\\d+)\\.(?<build>\\d+)\\.(?<revision>\\d+)$",
       "extends": [":separatePatchReleases"],
+      "separateMultipleMajor": true,
       "separateMultipleMinor": true
     },
     {
-      "description": "PHP: major/minor updates only appear in the Dependency Dashboard, no branch/MR until approved there",
-      "matchDepNames": ["serversideup/php (PHP)"],
+      "description": "serversideup/php: PHP major/minor updates only appear in the Dependency Dashboard, no branch/MR until approved there",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["serversideup/php", "**/serversideup/php"],
       "matchUpdateTypes": ["major", "minor"],
       "dependencyDashboardApproval": true
     }
